@@ -4,11 +4,14 @@
 # display minutes from 1 to 59
 hour=0
 
-while [ $hour -lt 12 ]; do
+while [ $hour -le 12 ]
+do
+	echo "Hour: $hour"
     minute=1
-    while [ $minute -lt 60 ]; do
-        printf "%02d:%02d\n" $hour $minute
-        minute=$((minute + 1))
+    while [ $minute -le 59 ]
+    do
+	    echo "$minute"
+	    (( minute++ ))
     done
-    hour=$((hour + 1))
-done | head -n 70
+    (( hour++ ))
+done

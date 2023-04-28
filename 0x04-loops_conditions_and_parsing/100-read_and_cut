@@ -1,20 +1,19 @@
 #!/bin/bash
+# a Bash script that displays the content of the file /etc/passwd.
+# Your script should only display:
 
-# Open the /etc/passwd file for reading
+#    username
+#    user id
+#    Home directory path for the user
+
 exec 3< /etc/passwd
-
-# Loop through each line in the file
 while read -u 3 line; do
-    # Extract the username, user ID, and home directory path from the line
     username=$(echo "$line" | cut -d: -f1)
     uid=$(echo "$line" | cut -d: -f3)
     home=$(echo "$line" | cut -d: -f6)
-
-    # Display the extracted information
     echo "Username: $username"
     echo "User ID: $uid"
     echo "Home Directory: $home"
 done
 
-# Close the file descriptor
 exec 3<&-

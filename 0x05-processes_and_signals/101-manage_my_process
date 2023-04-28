@@ -1,0 +1,71 @@
+#!/usr/bin/env bash
+
+# Manage the manage_my_process script
+
+# Check for existence of /etc/default/101-manage_my_process
+# If the file exists, it should contain the variable SCRIPT_PATH
+# Otherwise, SCRIPT_PATH should default to the current directory
+if [ -f /etc/default/101-manage_my_process ]; then
+  . /etc/default/101-manage_my_process
+else
+  SCRIPT_PATH="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+fi
+
+# Define the path to the manage_my_process script
+SCRIPT="$SCRIPT_PATH/manage_my_process.sh"
+
+# Define the path to the PID file
+PIDFILE="/var/run/my_process.pid"
+
+# Function to start the manage_my_process script
+start() {
+  # Check if the manage_my_process script is already running
+  if [ -f $PIDFILE ]; then
+    echo "manage_my_process is already running"
+    exit 1
+  fi
+
+  # Start the manage_my_process script
+  $SCRIPT &
+  echo $! > $PIDFILE
+  echo "manage_my_process started"
+}
+
+# Function to stop the manage_my_process script
+stop() {
+  # Check if the manage_my_process script is running
+  if [ ! -f $PIDFILE ]; then
+    echo "manage_my_process is not running"
+    exit 1
+  fi
+
+  # Stop the manage_my_process script
+  kill $(cat $PIDFILE)
+  rm $PIDFILE
+  echo "manage_my_process stopped"
+}
+
+# Function to restart the manage_my_process script
+restart() {
+  stop
+  start
+  echo "manage_my_process restarted"
+}
+
+# Check the argument passed to the script
+case "$1" in
+  start)
+    start
+    ;;
+  stop)
+    stop
+    ;;
+  restart)
+    restart
+    ;;
+  *)
+    echo "Usage: $0 {start|stop|restart}"
+    exit 1
+esac
+
+exit 0

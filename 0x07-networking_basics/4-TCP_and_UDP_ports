@@ -1,2 +1,7 @@
 #!/usr/bin/env bash
+# A Bash script that displays listening ports:
+
+#    That only shows listening sockets
+#    That shows the PID and name of the program to which each socket belongs
+
 netstat -lnp | awk '$6 == "LISTEN" && $1 == "tcp" || $1 == "udp" {printf "%-8s %-30s %s\n", $1, $4, $7}' | sed 's/[[:digit:]]*\// /g' | sort -k 3

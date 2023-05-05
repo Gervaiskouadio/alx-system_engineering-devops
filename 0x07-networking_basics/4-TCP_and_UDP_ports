@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+netstat -lnp | awk '$6 == "LISTEN" && $1 == "tcp" || $1 == "udp" {printf "%-8s %-30s %s\n", $1, $4, $7}' | sed 's/[[:digit:]]*\// /g' | sort -k 3
